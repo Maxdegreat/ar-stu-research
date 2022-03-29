@@ -12,6 +12,7 @@ import './App.css';
 import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
+import {drawKeypoints, drawSkeleton} from "./utilitis.js"
 
 
 function App() {
@@ -25,13 +26,22 @@ function App() {
       scale:0.5,
     });
     // set intervoal
+    setInterval(()  => {
+
+      detect(net)
+    },100)
+    console.log(net)
   }
 
   // Detect function
   const detect = async (net) => {
-    if (typeof webcamRef.current !== "undefined" && webcamRef.current != null && webcamRef.current.video.redyState === 4) {
+    if (
+        typeof webcamRef.current !== "undefined" 
+        && webcamRef.current !== null 
+        && webcamRef.current.video.readyState === 4
+      ) {
       // get vdeo properties
-      const video = webcamRef.current.video;
+      const video = webcamRef.current.video
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
 
@@ -40,10 +50,23 @@ function App() {
       webcamRef.current.video.height = videoHeight;
 
       // Make directions
-      const pose = await net.estimateSinglePost(video);
-      console.log(pose)
+      const pose = await net.estimateSinglePose(video);
+      console.log("calling pose")
+      console.log(pose);
+      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   }
+  
+  // drawig on the canvas
+  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+    const ctx = canvas.current.getContext("2d");
+    canvas.current.width = videoWidth
+    canvas.current.height = videoHeight
+
+    drawSkeleton(pose["keypoints"], 0.5, ctx)
+    drawKeypoints(pose["keypoints", 0.5, ctx])
+  }
+  runPosenet();
 
 
   return (
