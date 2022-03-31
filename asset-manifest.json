@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/http//Maxdegreat.github.io/ar-stu-research/static/css/main.073c9b0a.css",
+    "main.js": "/http//Maxdegreat.github.io/ar-stu-research/static/js/main.80909359.js",
+    "static/js/787.2e1ef0e5.chunk.js": "/http//Maxdegreat.github.io/ar-stu-research/static/js/787.2e1ef0e5.chunk.js",
+    "index.html": "/http//Maxdegreat.github.io/ar-stu-research/index.html",
+    "main.073c9b0a.css.map": "/http//Maxdegreat.github.io/ar-stu-research/static/css/main.073c9b0a.css.map",
+    "main.80909359.js.map": "/http//Maxdegreat.github.io/ar-stu-research/static/js/main.80909359.js.map",
+    "787.2e1ef0e5.chunk.js.map": "/http//Maxdegreat.github.io/ar-stu-research/static/js/787.2e1ef0e5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.80909359.js"
+  ]
+}
