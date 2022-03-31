@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/http//maxdegreat.github.io/ar-stu-research/static/css/main.073c9b0a.css",
-    "main.js": "/http//maxdegreat.github.io/ar-stu-research/static/js/main.9d5194b6.js",
-    "static/js/787.2e1ef0e5.chunk.js": "/http//maxdegreat.github.io/ar-stu-research/static/js/787.2e1ef0e5.chunk.js",
-    "index.html": "/http//maxdegreat.github.io/ar-stu-research/index.html",
-    "main.073c9b0a.css.map": "/http//maxdegreat.github.io/ar-stu-research/static/css/main.073c9b0a.css.map",
-    "main.9d5194b6.js.map": "/http//maxdegreat.github.io/ar-stu-research/static/js/main.9d5194b6.js.map",
-    "787.2e1ef0e5.chunk.js.map": "/http//maxdegreat.github.io/ar-stu-research/static/js/787.2e1ef0e5.chunk.js.map"
+    "main.css": "/ar-stu-research/static/css/main.073c9b0a.css",
+    "main.js": "/ar-stu-research/static/js/main.77012973.js",
+    "static/js/787.2e1ef0e5.chunk.js": "/ar-stu-research/static/js/787.2e1ef0e5.chunk.js",
+    "index.html": "/ar-stu-research/index.html",
+    "main.073c9b0a.css.map": "/ar-stu-research/static/css/main.073c9b0a.css.map",
+    "main.77012973.js.map": "/ar-stu-research/static/js/main.77012973.js.map",
+    "787.2e1ef0e5.chunk.js.map": "/ar-stu-research/static/js/787.2e1ef0e5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.9d5194b6.js"
+    "static/js/main.77012973.js"
   ]
 }
