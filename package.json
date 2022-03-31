@@ -1,9 +1,9 @@
 {
-  "homepage": "http//maxdegreat.github.io/ar-stu-research",
+  "homepage": "https://maxdegreat.github.io/ar-stu-research/",
   "proxy": "http://localhost:5000",
   "name": "pose-photo-shoot",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^3.15.0",
