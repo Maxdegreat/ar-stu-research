@@ -1,12 +1,12 @@
 import React from 'react'
-import {Nav, NavMenue, Bars, NavLink} from './navbarElements'
+import {Nav, NavBtnLink, NavMenue, NavBtn, Bars, NavLink} from './navbarElements'
 
 const Navbar = () => {
   return (
     <>
         <Nav>
             <NavLink to="/">
-                <h1> Logo </h1>
+                <h1> PVAMU Computer Vision </h1>
             </NavLink>
             <Bars />
             <NavMenue>

@@ -11,8 +11,22 @@ export const Nav = styled.nav`
     z-index: 10;
 `
 
+export const NavLink = styled(Link)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+
+    &.active {
+        color: #15cdfc;
+    }
+`
+
 export const Bars = styled(FaBars)`
-    display: none;]
+    display: none;
     color: #fff;
 
     @media screen and (max-width: 768px) {
@@ -29,26 +43,37 @@ export const Bars = styled(FaBars)`
 export const NavMenue = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 24px;
+    margin-right: -24px;
+    color: #fff
 
     @media screen and (max-width 768px) {
         display: none;
     }
 `
 
-export const NavLink = styled(Link)`
-    border-radius: 3px;
-    background: #256cel;
-    padding: 10px 22px;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    text-decoration: none;
+export const NavBtn = styled.nav`
+    display: flex;
+    align-items: center;
+    margin-right: 24px;
 
-    &:hover { 
-        transition: all 0.2s ease-in-out;
-        backgroun: #fff;
-        color: #010606;
+    @media screen and (max-width: 768) {
+        display: none;
     }
+`
+
+ export const NavBtnLink = styled(Link)`
+     border-radius: 3px;
+     background: #256cel;
+     padding: 10px 22px;
+     color: #fff;
+     border: none;
+     outline: none;
+     cursor: pointer;
+     transition: all 0.2s ease-in-out;
+     text-decoration: none;
+     &:hover { 
+         transition: all 0.2s ease-in-out;
+         backgroun: #fff;
+         color: #010606;
+     }
 `

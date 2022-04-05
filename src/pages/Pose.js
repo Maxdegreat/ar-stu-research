@@ -8,11 +8,11 @@
 // draw functions
 
 import React, { useRef } from "react";
-import './App.css';
+import '../App.css';
 import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
-import {drawKeypoints, drawSkeleton} from "./utilitis.js"
+import {drawKeypoints, drawSkeleton} from "../utilitis.js"
 
 
 function Pose() {
