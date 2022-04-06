@@ -13,6 +13,7 @@ import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
 import {drawKeypoints, drawSkeleton} from "../utilitis.js"
+import rive from "@rive-app/webgl";
 
 
 function Pose() {
@@ -61,8 +62,15 @@ function Pose() {
     canvas.current.width = videoWidth
     canvas.current.height = videoHeight
 
-    drawSkeleton(pose["keypoints"], 0.5, ctx)
-    drawKeypoints(pose["keypoints", 0.5, ctx])
+    // I have a map pose["keypoint"] -> which contains a map with key "nose" where key is nose i want the map positions and key vals x and y ... this is a graph lol
+    var x_path = pose["keypoints"][1]["position"]["x"]
+    var y_path = pose["keypoints"][1]["position"]["y"]
+    ctx.fillRect(x_path, y_path, 100, 100);
+    ctx.clearRect(x_path, y_path, 60, 60);
+    ctx.strokeRect(x_path, y_path, 50, 50);
+    
+    //drawSkeleton(pose["keypoints"], 0.5, ctx)
+    //drawKeypoints(pose["keypoints", 0.5, ctx])
   }
   runPosenet();
 
