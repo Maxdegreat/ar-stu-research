@@ -12,11 +12,11 @@ import '../App.css';
 import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
-import {drawKeypoints, drawSkeleton} from "../utilitis.js"
-import rive from "@rive-app/webgl";
+import {drawMesh} from "../utilitis.js"
 
 
 function Pose() {
+  var rate = {"neg": 0, "pos": 0};
   const webcamRef = useRef(null);
   const canvasRef  = useRef(null);
 
@@ -30,7 +30,7 @@ function Pose() {
     setInterval(()  => {
 
       detect(net)
-    },200)
+    },5000)
   }
 
   // Detect function
@@ -50,27 +50,26 @@ function Pose() {
       webcamRef.current.video.height = videoHeight;
 
       // Make directions
-      const pose = await net.estimateSinglePose(video);
+      const face = await net.estimateSinglePose(video);
  
-      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+      drawCanvas(face, video, videoWidth, videoHeight, canvasRef);
     }
   }
   
   // drawig on the canvas
-  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+  const drawCanvas = (face, video, videoWidth, videoHeight, canvas) => {
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth
     canvas.current.height = videoHeight
-
-    // I have a map pose["keypoint"] -> which contains a map with key "nose" where key is nose i want the map positions and key vals x and y ... this is a graph lol
-    var x_path = pose["keypoints"][1]["position"]["x"]
-    var y_path = pose["keypoints"][1]["position"]["y"]
-    ctx.fillRect(x_path, y_path, 100, 100);
-    ctx.clearRect(x_path, y_path, 60, 60);
-    ctx.strokeRect(x_path, y_path, 50, 50);
-    
-    //drawSkeleton(pose["keypoints"], 0.5, ctx)
-    //drawKeypoints(pose["keypoints", 0.5, ctx])
+    if ( face["keypoints"][0]["score"] < 0.8 ) {
+      rate["neg"] += 1;
+      console.log(rate)
+    } else {
+      rate["pos"] += 1;
+      console.log(rate)
+    }
+    console.log(face["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
+    drawMesh(face, ctx);
   }
   runPosenet();
 
