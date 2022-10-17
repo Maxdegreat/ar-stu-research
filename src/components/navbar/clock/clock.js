@@ -1,41 +1,43 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from "react";
 
-export default class Clock extends Component {
 
-constructor(props) {
-  super(props)
+const Clock = () => {
+  const [seconds, setSeconds] = useState(0)
+  const [minuets, setMinuets] = useState(0);
+  var timer;
+    useEffect(()=>{
+      timer = setInterval(() => {
+        setSeconds(seconds+1);
+        if (seconds===59) {
+          setMinuets(minuets+1);
+          setSeconds(0)
+        }
+      }, 1000);
+      return () => clearInterval(timer)
+    })
 
-  this.state = {
-     seconds: 0,
-     minuets: 0,
-     start: false,
-     stop: false,
-  }
-}
+    const timer_restart =()=> {
+      setSeconds(0);
+      setMinuets(0);
+    }
 
- runTimer = () => {
-    setInterval(() => {
-      if (this.state.seconds != 59) {
-        this.setState({
-          seconds: this.state.seconds += 1
-        })
-      } else {
-        this.setState({
-          minuets: this.state.minuets += 1,
-          seconds: this.setState.seconds = 0
-        })
-      }
-    }, 1000);
-}
+    const timer_stop =()=> {
+      clearInterval(timer)
+    }
 
-  render() {
-    this.runTimer()
     return (
-      <div>
-        <div className="TimeDisplay"> 
-          <h1> time {this.state.minuets} : {this.state.seconds} </h1>
+      <div className="timer">
+        <div className="container">
+          <div className="timer_container">
+            <h1>
+             {minuets < 10 ? "0" + minuets : minuets} : {seconds < 10 ? "0" + seconds : seconds}
+            </h1>
+            <button className="timer_start" onClick={timer_restart}> Restart </button>
+            <button className="timer_stop" onClick={timer_stop}> Stop </button>
+          </div>
         </div>
       </div>
-    )
-  }
+    );
 }
+
+export default Clock

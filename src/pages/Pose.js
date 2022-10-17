@@ -74,7 +74,7 @@ function Pose() {
     console.log(face["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
     drawMesh(face, ctx);
   };
-  runPosenet();
+  // runPosenet();
 
   return (
     <div className="Pose">
