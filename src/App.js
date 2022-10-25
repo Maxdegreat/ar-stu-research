@@ -12,13 +12,12 @@ import "./App.css";
 import Navbar from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Pose from "./pages/Pose";
-//import { Home } from './pages/Home';
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/poses" element={<Pose />} />
+        <Route path='/' element={<Pose />} />
       </Routes>
     </Router>
   );

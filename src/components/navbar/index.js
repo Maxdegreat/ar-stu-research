@@ -8,16 +8,6 @@ const Navbar = () => {
             <NavLink to="/">
                 <h1> PVAMU Computer Vision </h1>
             </NavLink>
-            <Bars />
-            <NavMenue>
-                <NavLink to="/poses" activestyle>
-                    Pose ;)
-                </NavLink>
-                <NavLink to="/about" activestyle>
-                    About 
-                </NavLink>
-            </NavMenue>
-            
         </Nav>
     </>
   )
