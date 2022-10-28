@@ -8,7 +8,6 @@
 // draw functions
 
 import React, { useRef } from "react";
-import "./App.css";
 import Navbar from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Pose from "./pages/Pose";
@@ -17,7 +16,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' element={<Pose />} />
+        <Route path='/ar-stu-research' element={<Pose />} />
       </Routes>
     </Router>
   );

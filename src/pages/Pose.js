@@ -23,7 +23,7 @@ function Pose() {
   const [duration, setDuration] = useState("00:05"); // "20:00"
   const [isStart, setStart] = useState(false);
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
-  var net;
+
   const onStartTimer = (e) => {
     e.preventDefault();
     setStart(true);
@@ -31,24 +31,35 @@ function Pose() {
   }
 
   var timer;
-  useEffect(() => {
+
+  useEffect( () =>  {
+    
     if (isStart) {
+      setStatus(false);
       timer = setInterval(() => {
-        if (minuets === 0 && seconds === 0) {
-          setStatus(true)
-        }
+      // The logic here is that the intervol can keep running but
+      // we only want the timer countdown to run if useState of setStatus is set to true
+      if (!isDone) {
         setSeconds(seconds - 1);
         if (seconds === 0) {
           setMinuets(minuets - 1);
           setSeconds(59);
 
-          if (seconds / 5 == 0) {
-            detect(net);
+          // if the seconds is divisibale by 5 then run our net modal (from func runPosenet)
+          if (seconds % 5 === 0) {
+            runPosenet();
+          }
+          // if time is equal to 00:00 then stop the timer and display results
+          if (minuets === 0 && seconds === 0) {
+            console.log("we should stop now");
+            setStatus(true); // isDone is now true so stop the seconds and minuets adjustments.
           }
 
         }
+      }
+      
       }, 1000);
-      return () => clearInterval(timer);
+     return () => clearInterval(timer);
     }
   });
 
@@ -69,32 +80,41 @@ function Pose() {
 
   // Load posenet
   const runPosenet = async () => {
-    net = await PoseNet.load({
-      inputResolution: { width: 640, height: 480 },
-      scale: 0.5,
-    });
+   var net = await PoseNet.load({
+     inputResolution: { width: 640, height: 480 },
+     scale: 0.5,
+   });
+
+   detect(net);
+
   };
 
   // Detect function
   const detect = async (net) => {
-    if (
-      typeof webcamRef.current !== "undefined" &&
-      webcamRef.current !== null &&
-      webcamRef.current.video.readyState === 4
-    ) {
-      // get vdeo properties
-      const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
-
-      // set the video width
-      webcamRef.current.video.width = videoWidth;
-      webcamRef.current.video.height = videoHeight;
-
-      // Make directions
-      const face = await net.estimateSinglePose(video);
-
-      drawCanvas(face, video, videoWidth, videoHeight, canvasRef);
+    try {
+      if (
+        typeof webcamRef.current !== "undefined" &&
+        webcamRef.current !== null &&
+        webcamRef.current.video.readyState === 4
+      ) {
+        // get vdeo properties
+        const video = webcamRef.current.video;
+        const videoWidth = webcamRef.current.video.videoWidth;
+        const videoHeight = webcamRef.current.video.videoHeight;
+  
+        // set the video width
+        webcamRef.current.video.width = videoWidth;
+        webcamRef.current.video.height = videoHeight;
+  
+        // Make directions
+        const face = await net.estimateSinglePose(video);
+  
+        drawCanvas(face, video, videoWidth, videoHeight, canvasRef);
+      }
+    } catch (error) {
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      console.log("there was an error when running detect")
+      console.log("${error}")
     }
   };
 
