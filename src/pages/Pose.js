@@ -15,6 +15,7 @@ import Webcam from "react-webcam";
 import './page.css';
 import { drawMesh } from "../utilitis.js";
 import { div, time } from "@tensorflow/tfjs";
+import * as facemesh from "@tensorflow-models/facemesh";
 
 function Pose() {
   
@@ -60,16 +61,18 @@ function Pose() {
         if (!isDone) {
           if (seconds === 0 && minuets === 0) {
             return clearInterval(timer)
+          } else {
+            console.log("called run posenet in the else statment")
+            runPosenet();
           }
           setSeconds(seconds - 1);
           if (seconds === 0) {
             setMinuets(minuets - 1);
           setSeconds(59);
-
           // if the seconds is divisibale by 5 then run our net modal (from func runPosenet)
-          if (seconds % 5 === 0) {
-            runPosenet();
-          }
+          //if (seconds % 5 === 0) {
+            // runPosenet();
+        //}
         }
       }
       
@@ -94,17 +97,22 @@ const canvasRef = useRef(null);
 
 // Load posenet
 const runPosenet = async () => {
-  var net = await PoseNet.load({
+  var netPose = await PoseNet.load({
     inputResolution: { width: 640, height: 480 },
     scale: 0.5,
   });
+
+  const netFace = await facemesh.load({
+       inputResolution: { width: 640, height: 480 },
+       scale: 0.8,
+     });
   
-  detect(net);
+  detect(netPose, netFace);
 
 };
 
 // Detect function
-const detect = async (net) => {
+const detect = async (netPose, netFace) => {
   try {
     if (
       typeof webcamRef.current !== "undefined" &&
@@ -121,9 +129,10 @@ const detect = async (net) => {
         webcamRef.current.video.height = videoHeight;
         
         // Make directions
-        const face = await net.estimateSinglePose(video);
+        const pose = await netPose.estimateSinglePose(video);
+        const face = await netFace.estimateFaces(video);
         
-        drawCanvas(face, video, videoWidth, videoHeight, canvasRef);
+        drawCanvas(pose, face, video, videoWidth, videoHeight, canvasRef);
       }
     } catch (error) {
       console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -133,11 +142,13 @@ const detect = async (net) => {
   };
   
   // drawig on the canvas
-  const drawCanvas = (face, video, videoWidth, videoHeight, canvas) => {
+  const drawCanvas = (pose, face, video, videoWidth, videoHeight, canvas) => {
+    console.log("in the draw canvas")
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
-    if (face["keypoints"][0]["score"] < 0.8) {
+    drawMesh(face, ctx);
+    if (pose["keypoints"][0]["score"] < 0.8) {
 
       setNeg(neg + 1);
       
@@ -148,11 +159,10 @@ const detect = async (net) => {
       console.log(pos);
     }
     
-    console.log(face["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
+    console.log(pose["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
     
     
     
-    // drawMesh(face, ctx);
   };
   
 
