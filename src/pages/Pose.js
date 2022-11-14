@@ -147,20 +147,28 @@ const detect = async (netPose, netFace) => {
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
-    drawMesh(face, ctx);
+    //       ctx        x                                               y         
+    drawMesh(
+      ctx, 
+      pose["keypoints"][1]["position"]["x"], 
+      pose["keypoints"][1]["position"]["y"],
+      // right eye - left eye
+      ( pose["keypoints"][2]["position"]["x"] - pose["keypoints"][1]["position"]["x"] ) - 50,
+      // the height
+      70
+    );
     if (pose["keypoints"][0]["score"] < 0.8) {
-
       setNeg(neg + 1);
-      
-      console.log(neg);
     } else {
       setPos(pos + 1);
-      
-      console.log(pos);
     }
     
-    console.log(pose["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
-    
+    // console.log(pose["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
+    // console.log(pose)
+    // this is the left eye
+    // console.log(pose["keypoints"][1]["position"]["x"] + " RIGHT EYE")
+    // right eye
+    // console.log(pose["keypoints"][2]["position"]["x"] + " LEFT EYE")
     
     
   };
