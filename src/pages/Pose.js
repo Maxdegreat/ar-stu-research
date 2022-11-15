@@ -50,35 +50,48 @@ function Pose() {
   }
   
   var timer;
+  var boundingBoxT;
   
   useEffect( () =>  {
-    
     if (isStart) {
       setStatus(false);
       timer = setInterval(() => {
-        // The logic here is that the intervol can keep running but
-        // we only want the timer countdown to run if useState of setStatus is set to true
         if (!isDone) {
           if (seconds === 0 && minuets === 0) {
             return clearInterval(timer)
           } else {
             console.log("called run posenet in the else statment")
-            runPosenet();
+            // runPosenet();
           }
           setSeconds(seconds - 1);
           if (seconds === 0) {
             setMinuets(minuets - 1);
           setSeconds(59);
-          // if the seconds is divisibale by 5 then run our net modal (from func runPosenet)
-          //if (seconds % 5 === 0) {
-            // runPosenet();
-        //}
         }
       }
       
     }, 1000);
     return () => clearInterval(timer);
   }
+});
+
+useEffect( () =>  {
+  if (isStart) {
+    // setStatus(false);
+    boundingBoxT = setInterval(() => {
+      
+      if (!isDone) {
+        if (seconds === 0 && minuets === 0) {
+          return clearInterval(timer)
+        } else {
+          runPosenet();
+        }
+ 
+    }
+    
+  }, 950);
+  return () => clearInterval(timer);
+}
 });
 
 const timer_restart = () => {
@@ -99,20 +112,20 @@ const canvasRef = useRef(null);
 const runPosenet = async () => {
   var netPose = await PoseNet.load({
     inputResolution: { width: 640, height: 480 },
-    scale: 0.5,
+    scale: 0.3,
   });
 
-  const netFace = await facemesh.load({
-       inputResolution: { width: 640, height: 480 },
-       scale: 0.8,
-     });
+  // const netFace = await facemesh.load({
+  //      inputResolution: { width: 640, height: 480 },
+  //      scale: 0.2,
+  //    });
   
-  detect(netPose, netFace);
+  detect(netPose,/* netFace */);
 
 };
 
 // Detect function
-const detect = async (netPose, netFace) => {
+const detect = async (netPose, /*netFace*/) => {
   try {
     if (
       typeof webcamRef.current !== "undefined" &&
@@ -130,9 +143,9 @@ const detect = async (netPose, netFace) => {
         
         // Make directions
         const pose = await netPose.estimateSinglePose(video);
-        const face = await netFace.estimateFaces(video);
+        // face = await netFace.estimateFaces(video);
         
-        drawCanvas(pose, face, video, videoWidth, videoHeight, canvasRef);
+        drawCanvas(pose,/* face, */ video, videoWidth, videoHeight, canvasRef);
       }
     } catch (error) {
       console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -142,7 +155,7 @@ const detect = async (netPose, netFace) => {
   };
   
   // drawig on the canvas
-  const drawCanvas = (pose, face, video, videoWidth, videoHeight, canvas) => {
+  const drawCanvas = (pose, /* face, */ video, videoWidth, videoHeight, canvas) => {
     console.log("in the draw canvas")
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth;
@@ -150,12 +163,12 @@ const detect = async (netPose, netFace) => {
     //       ctx        x                                               y         
     drawMesh(
       ctx, 
-      pose["keypoints"][1]["position"]["x"], 
-      pose["keypoints"][1]["position"]["y"],
+      pose["keypoints"][1]["position"]["x"] + 20, 
+      pose["keypoints"][1]["position"]["y"] - 50,
       // right eye - left eye
       ( pose["keypoints"][2]["position"]["x"] - pose["keypoints"][1]["position"]["x"] ) - 50,
       // the height
-      70
+      150
     );
     if (pose["keypoints"][0]["score"] < 0.8) {
       setNeg(neg + 1);
