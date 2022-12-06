@@ -16,12 +16,13 @@ import './page.css';
 import { drawMesh } from "../utilitis.js";
 import { div, time } from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/facemesh";
+import nightSkyVidBg from "../assets/night_sky_bg.mp4"
 
 function Pose() {
   
-  const [seconds, setSeconds] = useState(5); // 0
-  const [minuets, setMinuets] = useState(0); // 20
-  const [duration, setDuration] = useState("00:05"); // "20:00"
+  const [seconds, setSeconds] = useState(0); // 0
+  const [minuets, setMinuets] = useState(10); // 20
+  const [duration, setDuration] = useState("10:00"); // "20:00"
   const [isStart, setStart] = useState(false);
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
   const [neg, setNeg] = useState(0);
@@ -189,8 +190,15 @@ const detect = async (netPose, /*netFace*/) => {
 
   return (
     <div className="Pose">
-      {/* clock hook */}
-      <div className="timer">
+
+      <div className="bg">
+        <video src={nightSkyVidBg} muted autoPlay loop>
+
+        </video>
+      </div>
+
+    <div className="body">
+    <div className="timer">
       <div className="container">
         <div className="timer_container">
           <h1>
@@ -231,6 +239,11 @@ const detect = async (netPose, /*netFace*/) => {
             <button className="timerBtn" onClick={timer_stop}> Stop </button>
           </div>
 
+        <div className="infoSpan"> 
+          <span> {infoT1}</span>
+          <span> {infoT2} </span>
+        </div>
+
         </div>
       </div>
     </div>
@@ -267,13 +280,8 @@ const detect = async (netPose, /*netFace*/) => {
             height: 280,
           }}
         />
-      </header>
+      </header></div> 
     
-      <div className="infoSpan"> 
-        <span> {infoT1}</span>
-        <span> {infoT2} </span>
-      </div>
-
     </div>
   );
 }
