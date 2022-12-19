@@ -1,0 +1,3 @@
+- fix GPU leak w/ isMounted flags on intervols      --- Done
+- make sure I am tracking eye points to keep attention --- rate
+- have a detaled discription on the output of face tracking

@@ -16,6 +16,9 @@ import './page.css';
 import { drawMesh } from "../utilitis.js";
 import { div, time } from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/facemesh";
+import { attentiveList } from "./methods/attentive_list";
+import { nonAttentiveList } from "./methods/non_attentive_list";
+import { updateTimeUseEffect } from "./methods/update_timer";
 import nightSkyVidBg from "../assets/night_sky_bg.mp4"
 
 function Pose() {
@@ -27,6 +30,7 @@ function Pose() {
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
   const [neg, setNeg] = useState(0);
   const [pos, setPos] = useState(0);
+  const vidRef = useRef(null);
   
 
   
@@ -35,8 +39,9 @@ function Pose() {
   var infoT1;
   var infoT2;
   
+  // var attentiveSet = Set([0, 1, 2, 3, 4, 5, 6]);
   
-  if (seconds === 0 && minuets ===0 ) {
+  if (seconds === 0 && minuets === 0 ) {
     infoT1 = "attention points - " + pos;
     infoT2 = "non attentive points - " + neg;
   } else {
@@ -46,6 +51,7 @@ function Pose() {
   
   const onStartTimer = (e) => {
     e.preventDefault();
+    vidRef.current.pause();
     setStart(true);
     runPosenet();
   }
@@ -53,45 +59,30 @@ function Pose() {
   var timer;
   var boundingBoxT;
   
-  useEffect( () =>  {
-    if (isStart) {
-      setStatus(false);
-      timer = setInterval(() => {
-        if (!isDone) {
-          if (seconds === 0 && minuets === 0) {
-            return clearInterval(timer)
-          } else {
-            console.log("called run posenet in the else statment")
-            // runPosenet();
-          }
-          setSeconds(seconds - 1);
-          if (seconds === 0) {
-            setMinuets(minuets - 1);
-          setSeconds(59);
-        }
-      }
-      
-    }, 1000);
-    return () => clearInterval(timer);
-  }
-});
+  updateTimeUseEffect();
 
 useEffect( () =>  {
+  let isMounted = true;
   if (isStart) {
     // setStatus(false);
     boundingBoxT = setInterval(() => {
-      
+      if (isMounted) {
+
       if (!isDone) {
         if (seconds === 0 && minuets === 0) {
           return clearInterval(timer)
         } else {
           runPosenet();
         }
- 
     }
+
+  }
     
   }, 950);
-  return () => clearInterval(timer);
+  return () => {
+    clearInterval(timer);
+    isMounted = false;
+  }
 }
 });
 
@@ -176,9 +167,12 @@ const detect = async (netPose, /*netFace*/) => {
     } else {
       setPos(pos + 1);
     }
+
+    // I will console.log the pose so that I can see all the available imformation.
+    // with this infotmation I can conduct an output message that is discriptive and lets you know how well your attention rate is.
+    console.log(pose)
     
     // console.log(pose["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
-    // console.log(pose)
     // this is the left eye
     // console.log(pose["keypoints"][1]["position"]["x"] + " RIGHT EYE")
     // right eye
@@ -192,12 +186,13 @@ const detect = async (netPose, /*netFace*/) => {
     <div className="Pose">
 
       <div className="bg">
-        <video src={nightSkyVidBg} muted autoPlay loop>
+        <video ref={vidRef} src={nightSkyVidBg} muted autoPlay loop>
 
         </video>
       </div>
 
     <div className="body">
+      
     <div className="timer">
       <div className="container">
         <div className="timer_container">
@@ -208,6 +203,7 @@ const detect = async (netPose, /*netFace*/) => {
           <form>
             <label>Study Duration: </label>
             <select
+              style={{color: "black"}}
               value={duration}
               onChange={(e) => {
                 setDuration(e.target.value);
@@ -226,16 +222,18 @@ const detect = async (netPose, /*netFace*/) => {
                 }
               }}
             >
-              <option value="10:00"> 10:00 </option>
-              <option value="20:00"> 20:00 </option>
-              <option value="30:00"> 30:00 </option>
-              <option value="40:00"> 40:00 </option>
+              <option value="10:00" className="formTxt"> 10:00 </option>
+              <option value="20:00" className="formTxt"> 20:00 </option>
+              <option value="30:00" className="formTxt"> 30:00 </option>
+              <option value="40:00" className="formTxt"> 40:00 </option>
             </select>
           </form>
           
           <div className="timerBtns">
             <button className="timerBtn" onClick={(e) => onStartTimer(e)}> Start </button>
+            {"  "}
             <button className="timerBtn" onClick={timer_restart}> Restart </button>
+            {"  "}
             <button className="timerBtn" onClick={timer_stop}> Stop </button>
           </div>
 
