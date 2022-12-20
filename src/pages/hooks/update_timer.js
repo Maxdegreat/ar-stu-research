@@ -1,5 +1,6 @@
+import React, { useRef, useEffect, useState } from "react";
 
-export function updateTimeUseEffect() {
+export function UseUpdateTimeUseEffect(isStart, isDone, timer, setStatus, seconds, minuets, setMinuets, setSeconds ) {
 
     useEffect( () =>  {
         let isMounted = true;
@@ -36,5 +37,5 @@ export function updateTimeUseEffect() {
         })
       }
     });
-    
+
 }
