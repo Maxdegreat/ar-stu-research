@@ -5,8 +5,7 @@
   "version": "0.1.0",
   "private": false,
   "dependencies": {
-    "@rive-app/webgl": "^1.0.36",
-    "@tensorflow-models/facemesh": "^0.0.5",
+    "@reduxjs/toolkit": "^1.9.1",
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^3.15.0",
     "@testing-library/jest-dom": "^5.16.3",
@@ -16,6 +15,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.0",
     "react-webcam": "^7.0.0",

@@ -7,18 +7,18 @@
 // draw utilities
 // draw functions
 
-import React, { useRef } from "react";
-import Navbar from "./components/navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Pose from "./pages/Pose";
+
+import Container from "./components/Container";
+import Navbar from "./components/Navbar";
+import AttentionOutputs from "./components/AttentionOutputs";
+
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path='/ar-stu-research' element={<Pose />} />
-      </Routes>
-    </Router>
+    <div>
+      <Navbar/>
+      <Container/>
+      <AttentionOutputs/>
+    </div>
   );
 }
 

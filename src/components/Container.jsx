@@ -1,28 +1,13 @@
-// install dependicies # DONE ... the npm installs look at package.jason to find them
-// import dependencies # DONE ... line 10 and so on
-// set up web cam Done
-// define references to those Done
-// load posenet Done
-// detect functcion
-// draw utilities
-// draw functions
+import * as PoseNet from "@tensorflow-models/posenet";
 
 import React, { useRef, useEffect, useState } from "react";
-import "../App.css";
-import * as tf from "@tensorflow/tfjs";
-import * as PoseNet from "@tensorflow-models/posenet";
-import Webcam from "react-webcam";
-import "./page.css";
 import { drawMesh } from "../utilitis.js";
-import { div, time } from "@tensorflow/tfjs";
-import { attentiveList } from "./methods/attentive_list";
-import { nonAttentiveList } from "./methods/non_attentive_list";
-import { initPoints } from "./methods/init_points";
-import { UseUpdateTimeUseEffect } from "./hooks/update_timer";
-import { UsepreEngine } from "./hooks/pre_engine";
+import Webcam from "react-webcam";
+import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer"
 import nightSkyVidBg from "../assets/night_sky_bg.mp4";
+import "../pages/page.css";
 
-function Pose() {
+const Container = () => {
   const [seconds, setSeconds] = useState(0); // 0
   const [minuets, setMinuets] = useState(10); // 20
   const [duration, setDuration] = useState("10:00"); // "20:00"
@@ -110,11 +95,6 @@ function Pose() {
       inputResolution: { width: 640, height: 480 },
       scale: 0.3,
     });
-
-    // const netFace = await facemesh.load({
-    //      inputResolution: { width: 640, height: 480 },
-    //      scale: 0.2,
-    //    });
 
     detect(netPose /* netFace */);
   };
@@ -308,4 +288,4 @@ function Pose() {
   );
 }
 
-export default Pose;
+export default Container;
