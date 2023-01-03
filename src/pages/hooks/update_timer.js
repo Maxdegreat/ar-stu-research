@@ -15,8 +15,8 @@ export function UseUpdateTimeUseEffect(isStart, isDone, timer, setStatus, second
                   if (seconds === 0 && minuets === 0) {
                     return clearInterval(timer)
                   } else {
-                    console.log("called run posenet in the else statment")
-                    // runPosenet();
+                    // console.log("called run posenet in the else statment")
+                     //runPosenet();
                   }
                   
                     setSeconds(seconds - 1);

@@ -17,7 +17,6 @@ function App() {
     <div>
       <Navbar/>
       <Container/>
-      <AttentionOutputs/>
     </div>
   );
 }

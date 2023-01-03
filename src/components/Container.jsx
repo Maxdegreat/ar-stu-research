@@ -1,3 +1,4 @@
+import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 
 import React, { useRef, useEffect, useState } from "react";
@@ -5,22 +6,24 @@ import { drawMesh } from "../utilitis.js";
 import Webcam from "react-webcam";
 import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer"
 import nightSkyVidBg from "../assets/night_sky_bg.mp4";
+import AttentionOutputs from "./AttentionOutputs";
+import { increaseNose, increaseLeftEye, increaseRightEye, pointsSlice } from "../features/timer/pointsSlice.js";
+import { useDispatch } from 'react-redux';
 import "../pages/page.css";
 
 const Container = () => {
   const [seconds, setSeconds] = useState(0); // 0
-  const [minuets, setMinuets] = useState(10); // 20
-  const [duration, setDuration] = useState("10:00"); // "20:00"
+  const [minuets, setMinuets] = useState(1); // 10
+  const [duration, setDuration] = useState("1:00"); // "1:00"
   const [isStart, setStart] = useState(false);
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
   const [points, setPoints] = useState({});
   const vidRef = useRef(null);
+  const dispatch = useDispatch();
 
 
   var infoT1;
   var infoT2;
-
-  let activeS = new Set();
 
 
   if (seconds === 0 && minuets === 0) {
@@ -42,17 +45,66 @@ const Container = () => {
   var timer;
   var boundingBoxT;
 
-  UseUpdateTimeUseEffect(
-    isStart,
-    isDone,
-    timer,
-    setStatus,
-    seconds,
-    minuets,
-    setMinuets,
-    setSeconds
-  );
+  async function onSubmit() {
+    const response = await fetch("../pages/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ info: "leftEye: 27, rightEye: 27, nose: 40" }),
+    });
+    const data = await response.json();
+    console.log(data.result);
+  }
+
+  // UseUpdateTimeUseEffect(
+  //   isStart,
+  //   isDone,
+  //   timer,
+  //   setStatus,
+  //   seconds,
+  //   minuets,
+  //   setMinuets,
+  //   setSeconds
+  // );
   // UsepreEngine(isStart, isDone, boundingBoxT, timer, seconds, minuets, runPosenet());
+  
+  useEffect( () =>  {
+    let isMounted = true;
+
+    if (isStart) {
+      setStatus(false);
+      timer = setInterval(() => {
+        
+
+        if (isMounted) {
+            if (!isDone) {
+              if (seconds === 0 && minuets === 0) {
+                return clearInterval(timer)
+              } else {
+                 runPosenet();
+              }
+              
+                setSeconds(seconds - 1);
+
+              if (seconds === 0) {
+                
+                  setMinuets(minuets - 1);
+                  setSeconds(59);
+                
+            }
+          }
+        }
+      
+    }, 1000);
+    return ( () => {
+      clearInterval(timer);
+      isMounted = false;
+    })
+  }
+});
+
+
 
   useEffect(() => {
     let isMounted = true;
@@ -63,6 +115,8 @@ const Container = () => {
           //
           if (!isDone) {
             if (seconds === 0 && minuets === 0) {
+              // console.log("calling the openAI api ya dig");
+              onSubmit()
               return clearInterval(timer);
             } else {
               runPosenet();
@@ -91,12 +145,14 @@ const Container = () => {
 
   // Load posenet
   const runPosenet = async () => {
-    var netPose = await PoseNet.load({
+    
+    PoseNet.load({
       inputResolution: { width: 640, height: 480 },
       scale: 0.3,
-    });
-
-    detect(netPose /* netFace */);
+    }).then((netPose) => {
+      detect(netPose);
+    }).catch((err) => {console.log(err)});
+    
   };
 
   // Detect function
@@ -125,7 +181,7 @@ const Container = () => {
     } catch (error) {
       console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       console.log("there was an error when running detect");
-      console.log("${error}");
+      console.log(error);
     }
   };
 
@@ -137,7 +193,6 @@ const Container = () => {
     videoHeight,
     canvas
   ) => {
-    console.log("in the draw canvas");
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
@@ -153,21 +208,15 @@ const Container = () => {
       // the height
       150
     );
-    if (pose["keypoints"][0]["score"] < 0.8) {
-      // setNeg(neg + 1);
-    } else {
-      // setPos(pos + 1);
+
+    if (pose["keypoints"][0]["score"] > 0.8) {
+      dispatch(increaseNose({}));
+    } else if (pose["keypoints"][1]["score"] > 0.8) {
+      dispatch(increaseLeftEye({}));
+    } else if (pose["keypoints"][2]["score"] > 0.8) { 
+      dispatch(increaseRightEye({}));
     }
 
-    // I will console.log the pose so that I can see all the available imformation.
-    // with this infotmation I can conduct an output message that is discriptive and lets you know how well your attention rate is.
-    console.log(pose);
-
-    // console.log(pose["keypoints"][0]["score"]); // there is a value of face["keypoints"][idx]["score"]
-    // this is the left eye
-    // console.log(pose["keypoints"][1]["position"]["x"] + " RIGHT EYE")
-    // right eye
-    // console.log(pose["keypoints"][2]["position"]["x"] + " LEFT EYE")
   };
 
   return (
@@ -224,6 +273,8 @@ const Container = () => {
                   </option>
                 </select>
               </form>
+                  
+              <AttentionOutputs/>
 
               <div className="timerBtns">
                 <button className="timerBtn" onClick={(e) => onStartTimer(e)}>

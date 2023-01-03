@@ -4,28 +4,30 @@ import { useSelector } from 'react-redux'
 
 const AttentionOutputs = () => {
 
-    const styles = {
-        p: {
-            color: "black",
-            
-        }
-    }
-
+    
     const points = useSelector(selectPoints)
-
+    console.log(points)    
     const renderedPoints = 
-        <div>
-            <p> {points.nose} </p>
-            <p> {points.leftEye} </p>
+    <div>
+             <p> {points[0].id + ": " + points[0].amount} </p>
+            <p> {points[1].id + ": " + points[1].amount} </p>
+            <p> {points[2].id + ": " + points[2].amount} </p>
         </div>
     
 
-  return (
-    <section style={styles.section}>
+    return (
+        <section style={styles.section}>
         <h2 style={styles.title}>Points Outputs</h2>
         {renderedPoints}
     </section>
   )
+}
+
+const styles = {
+    p: {
+        color: "black",
+        
+    }
 }
 
 export default AttentionOutputs

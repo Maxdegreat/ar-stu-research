@@ -1,32 +1,55 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  nose: 0,
-  leftEye: 0,
-  rightEye: 0,
-  leftShoulder: 0,
-  rightShoulder: 0,
-
-  // if points below are seen this will play in a negative when forming the output of the 
-  // subjects attention points.
-  leftHip: 0,
-  rightHip: 0,
-  rightKnee: 0,
-  leftKnee: 0,
-}
+  posePoints: [
+    {
+      id: "nose",
+      amount: 0,
+    },
+    {
+      id: "leftEye",
+      amount: 0,
+    },
+    {
+      id: "rightEye",
+      amount: 0,
+    },
+  ],
+};
 
 export const pointsSlice = createSlice({
-  name: 'points',
+  name: "points",
   initialState,
   reducers: {
-  
-    
+    increaseNose: (state, { payload }) => {
+      console.log("in the increase method");
+      const poseItem = state.posePoints.find((p) => p.id === "nose");
+      poseItem.amount = poseItem.amount + 1
+      console.log("amount is now " + poseItem);
+    },
+
+    increaseLeftEye: (state, { payload }) => {
+      console.log("in the increase method");
+      const poseItem = state.posePoints.find((p) => p.id === "leftEye");
+      poseItem.amount = poseItem.amount + 1
+      console.log("amount is now " + poseItem);
+    },
+
+    increaseRightEye: (state, { payload }) => {
+      console.log("in the increase method");
+      const poseItem = state.posePoints.find((p) => p.id === "rightEye");
+      poseItem.amount = poseItem.amount + 1
+      console.log("amount is now " + poseItem);
+    },
+
   },
 });
 
 // Action creators are generated for each case reducer function
-export const selectPoints = (state) => state.points;
+export const selectPoints = (state) => {
+  return state.points.posePoints.map((p) => p);
+};
 
-export const { decrementSec, setTime } = pointsSlice.actions
+export const { increaseNose, increaseLeftEye, increaseRightEye } = pointsSlice.actions;
 
-export default pointsSlice.reducer
+export default pointsSlice.reducer;
