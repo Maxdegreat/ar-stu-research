@@ -17,6 +17,7 @@ const Container = () => {
   const [duration, setDuration] = useState("1:00"); // "1:00"
   const [isStart, setStart] = useState(false);
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
+  const [hasCalledOpenAi, callOpenAi] = useState(false);
   const [points, setPoints] = useState({});
   const vidRef = useRef(null);
   const dispatch = useDispatch();
@@ -57,17 +58,7 @@ const Container = () => {
     console.log(data.result);
   }
 
-  // UseUpdateTimeUseEffect(
-  //   isStart,
-  //   isDone,
-  //   timer,
-  //   setStatus,
-  //   seconds,
-  //   minuets,
-  //   setMinuets,
-  //   setSeconds
-  // );
-  // UsepreEngine(isStart, isDone, boundingBoxT, timer, seconds, minuets, runPosenet());
+  
   
   useEffect( () =>  {
     let isMounted = true;
@@ -115,8 +106,10 @@ const Container = () => {
           //
           if (!isDone) {
             if (seconds === 0 && minuets === 0) {
-              // console.log("calling the openAI api ya dig");
-              onSubmit()
+              if (!hasCalledOpenAi) {
+                callOpenAi(true);
+                onSubmit().then(() => { console.log("called the openAI api") })
+              }
               return clearInterval(timer);
             } else {
               runPosenet();
@@ -209,13 +202,18 @@ const Container = () => {
       150
     );
 
-    if (pose["keypoints"][0]["score"] > 0.8) {
+    if (pose["keypoints"][0]["score"] > 0.8)
       dispatch(increaseNose({}));
-    } else if (pose["keypoints"][1]["score"] > 0.8) {
+    else
+      dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
+    if (pose["keypoints"][1]["score"] > 0.8)
       dispatch(increaseLeftEye({}));
-    } else if (pose["keypoints"][2]["score"] > 0.8) { 
+    else
+    dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
+    if (pose["keypoints"][2]["score"] > 0.8) 
       dispatch(increaseRightEye({}));
-    }
+    else
+    dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
 
   };
 

@@ -9,9 +9,15 @@ const AttentionOutputs = () => {
     console.log(points)    
     const renderedPoints = 
     <div>
-             <p> {points[0].id + ": " + points[0].amount} </p>
-            <p> {points[1].id + ": " + points[1].amount} </p>
-            <p> {points[2].id + ": " + points[2].amount} </p>
+            <p> {points[0].id + ": " + points[0].amount[0]} </p>
+            <p> {points[1].id + ": " + points[1].amount[0]} </p>
+            <p> {points[2].id + ": " + points[2].amount[0]} </p>
+
+            <p>~~------------------------------------------------~~</p>
+
+            <p> {points[0].id + "non-attentive timeStamps: " + points[0].amount[1]} </p>
+            <p> {points[1].id + "non-attentive timeStamps: " + points[1].amount[1]} </p>
+            <p> {points[2].id + "non-attentive timeStamps: " + points[2].amount[1]} </p>
         </div>
     
 
