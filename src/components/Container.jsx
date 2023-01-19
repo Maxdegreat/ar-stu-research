@@ -4,11 +4,16 @@ import * as PoseNet from "@tensorflow-models/posenet";
 import React, { useRef, useEffect, useState } from "react";
 import { drawMesh } from "../utilitis.js";
 import Webcam from "react-webcam";
-import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer"
+import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer";
 import nightSkyVidBg from "../assets/night_sky_bg.mp4";
 import AttentionOutputs from "./AttentionOutputs";
-import { increaseNose, increaseLeftEye, increaseRightEye, pointsSlice } from "../features/timer/pointsSlice.js";
-import { useDispatch } from 'react-redux';
+import {
+  increaseNose,
+  increaseLeftEye,
+  increaseRightEye,
+  logNonAtentiveTimeStamp,
+} from "../features/timer/pointsSlice.js";
+import { useDispatch } from "react-redux";
 import "../pages/page.css";
 
 const Container = () => {
@@ -22,19 +27,8 @@ const Container = () => {
   const vidRef = useRef(null);
   const dispatch = useDispatch();
 
-
   var infoT1;
   var infoT2;
-
-
-  if (seconds === 0 && minuets === 0) {
-    // infoT1 = "attention points - " + pos;
-    // infoT2 = "non attentive points - " + neg;
-  } else {
-    infoT1 =
-      "Hey, we will let you know how well your attention rate was at the";
-    infoT2 = "at the end of the timer.";
-  }
 
   const onStartTimer = (e) => {
     e.preventDefault();
@@ -58,44 +52,35 @@ const Container = () => {
     console.log(data.result);
   }
 
-  
-  
-  useEffect( () =>  {
+  useEffect(() => {
     let isMounted = true;
 
     if (isStart) {
       setStatus(false);
       timer = setInterval(() => {
-        
-
         if (isMounted) {
-            if (!isDone) {
-              if (seconds === 0 && minuets === 0) {
-                return clearInterval(timer)
-              } else {
-                 runPosenet();
-              }
-              
-                setSeconds(seconds - 1);
+          if (!isDone) {
+            if (seconds === 0 && minuets === 0) {
+              return clearInterval(timer);
+            } else {
+              runPosenet();
+            }
 
-              if (seconds === 0) {
-                
-                  setMinuets(minuets - 1);
-                  setSeconds(59);
-                
+            setSeconds(seconds - 1);
+
+            if (seconds === 0) {
+              setMinuets(minuets - 1);
+              setSeconds(59);
             }
           }
         }
-      
-    }, 1000);
-    return ( () => {
-      clearInterval(timer);
-      isMounted = false;
-    })
-  }
-});
-
-
+      }, 1000);
+      return () => {
+        clearInterval(timer);
+        isMounted = false;
+      };
+    }
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -108,7 +93,9 @@ const Container = () => {
             if (seconds === 0 && minuets === 0) {
               if (!hasCalledOpenAi) {
                 callOpenAi(true);
-                onSubmit().then(() => { console.log("called the openAI api") })
+                onSubmit().then(() => {
+                  console.log("called the openAI api");
+                });
               }
               return clearInterval(timer);
             } else {
@@ -138,14 +125,16 @@ const Container = () => {
 
   // Load posenet
   const runPosenet = async () => {
-    
     PoseNet.load({
       inputResolution: { width: 640, height: 480 },
       scale: 0.3,
-    }).then((netPose) => {
-      detect(netPose);
-    }).catch((err) => {console.log(err)});
-    
+    })
+      .then((netPose) => {
+        detect(netPose);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // Detect function
@@ -202,19 +191,12 @@ const Container = () => {
       150
     );
 
-    if (pose["keypoints"][0]["score"] > 0.8)
-      dispatch(increaseNose({}));
-    else
-      dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
-    if (pose["keypoints"][1]["score"] > 0.8)
-      dispatch(increaseLeftEye({}));
-    else
-    dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
-    if (pose["keypoints"][2]["score"] > 0.8) 
-      dispatch(increaseRightEye({}));
-    else
-    dispatch(logNonAtentiveTimeStamp({"keypoint":0}));
-
+    if (pose["keypoints"][0]["score"] > 0.8) dispatch(increaseNose({}));
+    else dispatch(logNonAtentiveTimeStamp({ keypoint: 0 }));
+    if (pose["keypoints"][1]["score"] > 0.8) dispatch(increaseLeftEye({}));
+    else dispatch(logNonAtentiveTimeStamp({ keypoint: 0 }));
+    if (pose["keypoints"][2]["score"] > 0.8) dispatch(increaseRightEye({}));
+    else dispatch(logNonAtentiveTimeStamp({ keypoint: 0 }));
   };
 
   return (
@@ -223,118 +205,86 @@ const Container = () => {
         <video ref={vidRef} src={nightSkyVidBg} muted autoPlay loop></video>
       </div>
 
-      <div className="body">
-        <div className="timer">
-          <div className="container">
-            <div className="timer_container">
-              <h1>
-                {minuets < 10 ? "0" + minuets : minuets} :{" "}
-                {seconds < 10 ? "0" + seconds : seconds}
-              </h1>
-              <form>
-                <label>Study Duration: </label>
-                <select
-                  style={{ color: "black" }}
-                  value={duration}
-                  onChange={(e) => {
-                    setDuration(e.target.value);
-                    if (e.target.value === "10:00") {
-                      setMinuets(10);
-                      setSeconds(0);
-                    } else if (e.target.value === "20:00") {
-                      setMinuets(20);
-                      setSeconds(0);
-                    } else if (e.target.value === "30:00") {
-                      setMinuets(30);
-                      setSeconds(0);
-                    } else if (e.target.value === "40:00") {
-                      setMinuets(40);
-                      setSeconds(0);
-                    }
-                  }}
-                >
-                  <option value="10:00" className="formTxt">
-                    {" "}
-                    10:00{" "}
-                  </option>
-                  <option value="20:00" className="formTxt">
-                    {" "}
-                    20:00{" "}
-                  </option>
-                  <option value="30:00" className="formTxt">
-                    {" "}
-                    30:00{" "}
-                  </option>
-                  <option value="40:00" className="formTxt">
-                    {" "}
-                    40:00{" "}
-                  </option>
-                </select>
-              </form>
-                  
-              <AttentionOutputs/>
-
-              <div className="timerBtns">
-                <button className="timerBtn" onClick={(e) => onStartTimer(e)}>
-                  {" "}
-                  Start{" "}
-                </button>
-                {"  "}
-                <button className="timerBtn" onClick={timer_restart}>
-                  {" "}
-                  Restart{" "}
-                </button>
-                {"  "}
-                <button className="timerBtn" onClick={timer_stop}>
-                  {" "}
-                  Stop{" "}
-                </button>
-              </div>
-
-              <div className="infoSpan">
-                <span> {infoT1}</span>
-                <span> {infoT2} </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* clock hook */}
-        <header className="Pose-header">
-          <Webcam
-            ref={webcamRef}
-            style={{
-              borderRadius: "20",
-              position: "absolute",
-              marginLeft: "auto",
-              marginRight: "auto",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zIndex: 9,
-              width: 440,
-              height: 280,
+      <div className="left-row">
+        <form>
+          <label>Study Duration: </label>
+          <select
+            style={{ color: "black" }}
+            value={duration}
+            onChange={(e) => {
+              setDuration(e.target.value);
+              if (e.target.value === "10:00") {
+                setMinuets(10);
+                setSeconds(0);
+              } else if (e.target.value === "20:00") {
+                setMinuets(20);
+                setSeconds(0);
+              } else if (e.target.value === "30:00") {
+                setMinuets(30);
+                setSeconds(0);
+              } else if (e.target.value === "40:00") {
+                setMinuets(40);
+                setSeconds(0);
+              }
             }}
-          />
+          >
+            <option value="10:00" className="formTxt">
+              {" "}
+              10:00{" "}
+            </option>
+            <option value="20:00" className="formTxt">
+              {" "}
+              20:00{" "}
+            </option>
+            <option value="30:00" className="formTxt">
+              {" "}
+              30:00{" "}
+            </option>
+            <option value="40:00" className="formTxt">
+              {" "}
+              40:00{" "}
+            </option>
+          </select>
+        </form>
 
-          <canvas
-            ref={canvasRef}
-            style={{
-              borderRadius: "20",
-              position: "absolute",
-              marginLeft: "auto",
-              marginRight: "auto",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zIndex: 9,
-              width: 440,
-              height: 280,
-            }}
-          />
-        </header>
+        {/* display point outputs */}
+        <AttentionOutputs />
       </div>
+
+      <div className="body">
+        {/* clock hook */}
+        <header>
+          
+          <Webcam className="webcam" ref={webcamRef} />
+          <canvas className="webcam" ref={canvasRef} />
+
+          <div className="timerBtns">
+            <button className="timerBtn" onClick={(e) => onStartTimer(e)}>
+              {" "}
+              Start{" "}
+            </button>
+            {"  "}
+            <button className="timerBtn" onClick={timer_restart}>
+              {" "}
+              Restart{" "}
+            </button>
+            {"  "}
+            <button className="timerBtn" onClick={timer_stop}>
+              {" "}
+              Stop{" "}
+            </button>
+            {"  "}
+          </div>
+          <h1>
+            {minuets < 10 ? "0" + minuets : minuets} :{" "}
+            {seconds < 10 ? "0" + seconds : seconds}
+          </h1>
+        </header>
+
+      </div>
+        
     </div>
   );
-}
+};
 
 export default Container;

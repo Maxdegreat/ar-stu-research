@@ -15,9 +15,7 @@ const AttentionOutputs = () => {
 
             <p>~~------------------------------------------------~~</p>
 
-            <p> {points[0].id + "non-attentive timeStamps: " + points[0].amount[1]} </p>
-            <p> {points[1].id + "non-attentive timeStamps: " + points[1].amount[1]} </p>
-            <p> {points[2].id + "non-attentive timeStamps: " + points[2].amount[1]} </p>
+            <p> {" Size of non-attentive timeStamps size: " + points[0].amount.length } </p>
         </div>
     
 

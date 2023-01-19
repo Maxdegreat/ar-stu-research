@@ -23,29 +23,31 @@ export const pointsSlice = createSlice({
   reducers: {
     increaseNose: (state, { payload }) => {
       const poseItem = state.posePoints.find((p) => p.id === "nose");
-      poseItem.amount[0] += 1
+      poseItem.amount[0] += 1;
     },
 
     logNonAtentiveTimeStamp: (state, { payload }) => {
+      var poseItem;
+
       if (payload.keypoint == 0)
         poseItem = state.posePoints.find((p) => p.id === "nose");
       else if (payload.keypoint == 1)
         poseItem = state.posePoints.find((p) => p.id === "LeftEye");
       else if (payload.keypoint == 2)
         poseItem = state.posePoints.find((p) => p.id === "RightEye");
-      poseItem.amount.push(Date.now())
+      poseItem.amount.push(Date.now());
+      console.log("pushing a new pose point: " + poseItem.amount + "!!!!!!!");
     },
 
     increaseLeftEye: (state, { payload }) => {
       const poseItem = state.posePoints.find((p) => p.id === "leftEye");
-      poseItem.amount[0] += 1
+      poseItem.amount[0] += 1;
     },
 
     increaseRightEye: (state, { payload }) => {
       const poseItem = state.posePoints.find((p) => p.id === "rightEye");
-      poseItem.amount[0] += 1
+      poseItem.amount[0] += 1;
     },
-
   },
 });
 
@@ -54,7 +56,11 @@ export const selectPoints = (state) => {
   return state.points.posePoints.map((p) => p);
 };
 
-
-export const { increaseNose, increaseLeftEye, increaseRightEye, logNonAtentiveTimeStamp } = pointsSlice.actions;
+export const {
+  increaseNose,
+  increaseLeftEye,
+  increaseRightEye,
+  logNonAtentiveTimeStamp,
+} = pointsSlice.actions;
 
 export default pointsSlice.reducer;
