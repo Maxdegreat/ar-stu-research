@@ -1,14 +1,13 @@
 import React from 'react'
 import { selectPoints } from "../features/timer/pointsSlice"
 import { useSelector } from 'react-redux'
+import '../pages/page.css'
 
 const AttentionOutputs = () => {
-
-    
     const points = useSelector(selectPoints)
     console.log(points)    
     const renderedPoints = 
-    <div>
+    <div style={{boxSizing: "border-box", width: "50%", width: "300px", padding: "10px", color: "green"}}>
             <p> {points[0].id + ": " + points[0].amount[0]} </p>
             <p> {points[1].id + ": " + points[1].amount[0]} </p>
             <p> {points[2].id + ": " + points[2].amount[0]} </p>
@@ -16,22 +15,34 @@ const AttentionOutputs = () => {
             <p>~~------------------------------------------------~~</p>
 
             <p> {" Size of non-attentive timeStamps size: " + points[0].amount.length } </p>
+            <br></br>
+            <br></br>
+            <p> Timestamps of when attention was lacked: </p>
+            <p> { points[0].id + ": "}  </p>
         </div>
-    
+
+const nonAttentivePointsNose = (
+    <div>
+      {points[0].amount.map((element, index) => {
+        return element === points[0].amount[0] ? (
+          <div key={index} />
+        ) : (
+          <p key={index}>{element}</p>
+        );
+      })}
+    </div>
+  );
+  
 
     return (
-        <section style={styles.section}>
-        <h2 style={styles.title}>Points Outputs</h2>
-        {renderedPoints}
-    </section>
+        <section>
+            {renderedPoints}
+            {nonAttentivePointsNose}
+        </section>
   )
 }
 
-const styles = {
-    p: {
-        color: "black",
-        
-    }
-}
+
+
 
 export default AttentionOutputs

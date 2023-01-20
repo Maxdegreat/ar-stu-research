@@ -26,27 +26,35 @@ video {
     background-color: rgb(0, 0, 5);
 }
 
+.row {
+    display: flex;
+}
+
+.col {
+    flex: 1;
+}
+
 .body {
     position: absolute;
-    width: 100%;
-    height: 50%;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: rgb(0, 0, 5);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center; /* centers the elements inside the parent container horizontally */
+    z-index: 1;
     
 }
 
+.cam {
+    padding: 10px;
+    /* display: grid; */
+    position: relative;
+    display: inline-block ;
+    align-items: center;
+    justify-content: center;
+}
+
 .webcam {
-    border-radius: 50;
-    position: "absolute";
-    top: 100%;
-    bottom: 0;
-    text-align: center;
-    z-index: 9;
-    width: 440px;
+    width: 400px;
     height: 200px;
       
 }
@@ -60,19 +68,15 @@ video {
     left: 0;
 }
 
-.timer {
-    position: "absolute";
-    height: 50%;
-    top: 30%;
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-}
+
 
 .timerBtns {
     padding: 10px;
+    display: grid;
+    position: relative;
+    display: inline-block ;
+    align-items: center;
+    justify-content: center;
 }
 
 .timerBtn {

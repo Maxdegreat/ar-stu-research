@@ -205,7 +205,10 @@ const Container = () => {
         <video ref={vidRef} src={nightSkyVidBg} muted autoPlay loop></video>
       </div>
 
-      <div className="left-row">
+      <div className="row">
+
+    <div className="col">
+    <div className="left-row">
         <form>
           <label>Study Duration: </label>
           <select
@@ -250,39 +253,46 @@ const Container = () => {
         {/* display point outputs */}
         <AttentionOutputs />
       </div>
+    </div>
+      
+      <div className="col">
+        <div className="body">
+          {/* clock hook */}
 
-      <div className="body">
-        {/* clock hook */}
-        <header>
-          
-          <Webcam className="webcam" ref={webcamRef} />
-          <canvas className="webcam" ref={canvasRef} />
 
-          <div className="timerBtns">
-            <button className="timerBtn" onClick={(e) => onStartTimer(e)}>
-              {" "}
-              Start{" "}
-            </button>
-            {"  "}
-            <button className="timerBtn" onClick={timer_restart}>
-              {" "}
-              Restart{" "}
-            </button>
-            {"  "}
-            <button className="timerBtn" onClick={timer_stop}>
-              {" "}
-              Stop{" "}
-            </button>
-            {"  "}
-          </div>
-          <h1>
-            {minuets < 10 ? "0" + minuets : minuets} :{" "}
-            {seconds < 10 ? "0" + seconds : seconds}
-          </h1>
-        </header>
+           <div className="cam">
+            <Webcam className="webcam" ref={webcamRef} />
+            <canvas className="webcam" ref={canvasRef} />
+           </div>
+
+            <div className="timerBtns">
+              <button className="timerBtn" onClick={(e) => onStartTimer(e)}>
+                {" "}
+                Start{" "}
+              </button>
+              {"  "}
+              <button className="timerBtn" onClick={timer_restart}>
+                {" "}
+                Restart{" "}
+              </button>
+              {"  "}
+              <button className="timerBtn" onClick={timer_stop}>
+                {" "}
+                Stop{" "}
+              </button>
+              {"  "}
+            </div>
+            <h1>
+              {minuets < 10 ? "0" + minuets : minuets} :{" "}
+              {seconds < 10 ? "0" + seconds : seconds}
+            </h1>
+    
+
+        </div>
+      </div>
 
       </div>
-        
+
     </div>
   );
 };
