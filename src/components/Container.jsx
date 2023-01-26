@@ -5,7 +5,6 @@ import React, { useRef, useEffect, useState } from "react";
 import { drawMesh } from "../utilitis.js";
 import Webcam from "react-webcam";
 import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer";
-import nightSkyVidBg from "../assets/night_sky_bg.mp4";
 import AttentionOutputs from "./AttentionOutputs";
 import {
   increaseNose,
@@ -24,7 +23,6 @@ const Container = () => {
   const [isDone, setStatus] = useState(false); // false (not done) true (done)
   const [hasCalledOpenAi, callOpenAi] = useState(false);
   const [points, setPoints] = useState({});
-  const vidRef = useRef(null);
   const dispatch = useDispatch();
 
   var infoT1;
@@ -32,7 +30,6 @@ const Container = () => {
 
   const onStartTimer = (e) => {
     e.preventDefault();
-    vidRef.current.pause();
     setStart(true);
     runPosenet();
   };
@@ -181,14 +178,14 @@ const Container = () => {
     //       ctx        x                                               y
     drawMesh(
       ctx,
-      pose["keypoints"][1]["position"]["x"] + 20,
-      pose["keypoints"][1]["position"]["y"] - 50,
+      pose["keypoints"][1]["position"]["x"] + 100,
+      pose["keypoints"][1]["position"]["y"] - 150,
       // right eye - left eye
       pose["keypoints"][2]["position"]["x"] -
         pose["keypoints"][1]["position"]["x"] -
-        50,
+        150,
       // the height
-      150
+      250
     );
 
     if (pose["keypoints"][0]["score"] > 0.8) dispatch(increaseNose({}));
@@ -201,9 +198,6 @@ const Container = () => {
 
   return (
     <div className="Pose">
-      <div className="bg">
-        <video ref={vidRef} src={nightSkyVidBg} muted autoPlay loop></video>
-      </div>
 
       <div className="row">
 
@@ -260,10 +254,37 @@ const Container = () => {
           {/* clock hook */}
 
 
-           <div className="cam">
-            <Webcam className="webcam" ref={webcamRef} />
-            <canvas className="webcam" ref={canvasRef} />
-           </div>
+           
+          <Webcam
+          ref={webcamRef}
+          // style={{
+          //   position: "absolute",
+          //   marginLeft: "auto",
+          //   marginRight: "auto",
+          //   left: 0,
+          //   right: 0,
+          //   textAlign: "center",
+          //   zindex: 9,
+          //   width: 400,
+          //   height: 400,
+          // }}
+        />
+
+        <canvas
+          ref={canvasRef}
+          // style={{
+          //   position: "absolute",
+          //   marginLeft: "auto",
+          //   marginRight: "auto",
+          //   left: 0,
+          //   right: 0,
+          //   textAlign: "center",
+          //   zindex: 9,  
+          //   width: 400,
+          //   height: 400,  
+          // }}
+        />
+
 
             <div className="timerBtns">
               <button className="timerBtn" onClick={(e) => onStartTimer(e)}>

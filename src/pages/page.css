@@ -1,91 +1,77 @@
-* {
-    margin: 0;
-    padding: 0;
-    color: #fff;
-    /* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
-}
-
-video {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    z-index: -100;
-    
-}
-
-.bg {
-    z-index: 1;
-    background-color: rgb(0, 0, 0);
-}
-
-.formTxt {
-    color: rgb(0, 0, 0)
-}
-
-.bodyOverlay {
-    background-color: rgb(0, 0, 5);
-}
-
-.row {
+.Pose {
     display: flex;
-}
-
-.col {
-    flex: 1;
-}
-
-.body {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center; /* centers the elements inside the parent container horizontally */
-    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    }
     
-}
-
-.cam {
-    padding: 10px;
-    /* display: grid; */
-    position: relative;
-    display: inline-block ;
-    align-items: center;
+    .row {
+    display: flex;
     justify-content: center;
-}
-
-.webcam {
-    width: 400px;
-    height: 200px;
-      
-}
-
-.left-row {
-    padding: 10px;
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    top: 10%;
-    left: 0;
-}
-
-
-
-.timerBtns {
-    padding: 10px;
-    display: grid;
-    position: relative;
-    display: inline-block ;
     align-items: center;
+    flex-wrap: wrap;
+    }
+    
+    .col {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-}
-
-.timerBtn {
-    background-color: black;
+    align-items: center;
+    margin: 0 auto;
+    }
+    
+    .left-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    }
+    
+    .formTxt {
+    font-size: 16px;
+    }
+    
+    .body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    }
+    
+    .timerBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    }
+    
+    .timerBtn {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
     color: white;
-    font-size: 20px;
-    padding: 10px 60px;
-    border-radius: 5px;
-    margin: 10px 0px;
+    border: none;
     cursor: pointer;
-}
-
+    margin: 10px;
+    }
+    
+    .timerBtn:hover {
+    background-color: #3e8e41;
+    }
+    
+    canvas, .webcam {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+        height: 400px;
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 9;
+        }

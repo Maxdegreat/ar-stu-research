@@ -22,7 +22,7 @@ const AttentionOutputs = () => {
         </div>
 
 const nonAttentivePointsNose = (
-    <div>
+    <div style={{boxSizing: "border-box", width: "50%", width: "300px", padding: "10px", color: "green", height: "200px", overflow: "scroll"}}>
       {points[0].amount.map((element, index) => {
         return element === points[0].amount[0] ? (
           <div key={index} />
