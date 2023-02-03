@@ -6,6 +6,7 @@ import { drawMesh } from "../utilitis.js";
 import Webcam from "react-webcam";
 import { UseUpdateTimeUseEffect } from "../pages/hooks/update_timer";
 import AttentionOutputs from "./AttentionOutputs";
+import ResponseOutput from "./ResponseOutput";
 import {
   increaseNose,
   increaseLeftEye,
@@ -37,17 +38,7 @@ const Container = () => {
   var timer;
   var boundingBoxT;
 
-  async function onSubmit() {
-    const response = await fetch("../pages/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ info: "leftEye: 27, rightEye: 27, nose: 40" }),
-    });
-    const data = await response.json();
-    console.log(data.result);
-  }
+  async function onSubmit() {}
 
   useEffect(() => {
     let isMounted = true;
@@ -198,93 +189,88 @@ const Container = () => {
 
   return (
     <div className="Pose">
-
       <div className="row">
+        <div className="col">
+          <div className="left-row">
+            <form>
+              <label>Study Duration: </label>
+              <select
+                style={{ color: "black" }}
+                value={duration}
+                onChange={(e) => {
+                  setDuration(e.target.value);
+                  if (e.target.value === "10:00") {
+                    setMinuets(10);
+                    setSeconds(0);
+                  } else if (e.target.value === "20:00") {
+                    setMinuets(20);
+                    setSeconds(0);
+                  } else if (e.target.value === "30:00") {
+                    setMinuets(30);
+                    setSeconds(0);
+                  } else if (e.target.value === "40:00") {
+                    setMinuets(40);
+                    setSeconds(0);
+                  }
+                }}
+              >
+                <option value="10:00" className="formTxt">
+                  {" "}
+                  10:00{" "}
+                </option>
+                <option value="20:00" className="formTxt">
+                  {" "}
+                  20:00{" "}
+                </option>
+                <option value="30:00" className="formTxt">
+                  {" "}
+                  30:00{" "}
+                </option>
+                <option value="40:00" className="formTxt">
+                  {" "}
+                  40:00{" "}
+                </option>
+              </select>
+            </form>
 
-    <div className="col">
-    <div className="left-row">
-        <form>
-          <label>Study Duration: </label>
-          <select
-            style={{ color: "black" }}
-            value={duration}
-            onChange={(e) => {
-              setDuration(e.target.value);
-              if (e.target.value === "10:00") {
-                setMinuets(10);
-                setSeconds(0);
-              } else if (e.target.value === "20:00") {
-                setMinuets(20);
-                setSeconds(0);
-              } else if (e.target.value === "30:00") {
-                setMinuets(30);
-                setSeconds(0);
-              } else if (e.target.value === "40:00") {
-                setMinuets(40);
-                setSeconds(0);
-              }
-            }}
-          >
-            <option value="10:00" className="formTxt">
-              {" "}
-              10:00{" "}
-            </option>
-            <option value="20:00" className="formTxt">
-              {" "}
-              20:00{" "}
-            </option>
-            <option value="30:00" className="formTxt">
-              {" "}
-              30:00{" "}
-            </option>
-            <option value="40:00" className="formTxt">
-              {" "}
-              40:00{" "}
-            </option>
-          </select>
-        </form>
+            {/* display point outputs */}
+            <AttentionOutputs />
+          </div>
+        </div>
 
-        {/* display point outputs */}
-        <AttentionOutputs />
-      </div>
-    </div>
-      
-      <div className="col">
-        <div className="body">
-          {/* clock hook */}
+        <div className="col">
+          <div className="body">
+            {/* clock hook */}
 
+            <Webcam
+              ref={webcamRef}
+              // style={{
+              //   position: "absolute",
+              //   marginLeft: "auto",
+              //   marginRight: "auto",
+              //   left: 0,
+              //   right: 0,
+              //   textAlign: "center",
+              //   zindex: 9,
+              //   width: 400,
+              //   height: 400,
+              // }}
+            />
 
-           
-          <Webcam
-          ref={webcamRef}
-          // style={{
-          //   position: "absolute",
-          //   marginLeft: "auto",
-          //   marginRight: "auto",
-          //   left: 0,
-          //   right: 0,
-          //   textAlign: "center",
-          //   zindex: 9,
-          //   width: 400,
-          //   height: 400,
-          // }}
-        />
-
-        <canvas
-          ref={canvasRef}
-          // style={{
-          //   position: "absolute",
-          //   marginLeft: "auto",
-          //   marginRight: "auto",
-          //   left: 0,
-          //   right: 0,
-          //   textAlign: "center",
-          //   zindex: 9,  
-          //   width: 400,
-          //   height: 400,  
-          // }}
-        />
-
+            <canvas
+              ref={canvasRef}
+              // style={{
+              //   position: "absolute",
+              //   marginLeft: "auto",
+              //   marginRight: "auto",
+              //   left: 0,
+              //   right: 0,
+              //   textAlign: "center",
+              //   zindex: 9,
+              //   width: 400,
+              //   height: 400,
+              // }}
+            />
 
             <div className="timerBtns">
               <button className="timerBtn" onClick={(e) => onStartTimer(e)}>
@@ -307,13 +293,12 @@ const Container = () => {
               {minuets < 10 ? "0" + minuets : minuets} :{" "}
               {seconds < 10 ? "0" + seconds : seconds}
             </h1>
-    
-
+          </div>
+        </div>
+        <div className="right-col">
+          <ResponseOutput />
         </div>
       </div>
-
-      </div>
-
     </div>
   );
 };

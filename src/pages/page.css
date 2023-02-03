@@ -23,13 +23,22 @@
     .left-row {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center;    
     align-items: center;
     margin: 0 auto;
     }
-    
+
+    .right-col {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        width: 150px;
+        height: 100vh;
+        padding-left: 20px;
+      }
+      
     .formTxt {
-    font-size: 16px;
+        font-size: 16px;
     }
     
     .body {
