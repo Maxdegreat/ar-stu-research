@@ -13,13 +13,13 @@ import * as tf from "@tensorflow/tfjs";
 import * as PoseNet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
 import "./page.css";
-import { drawMesh } from "../utilitis.js";
+import { drawMesh } from "./utilitis.js";
 import { div, time } from "@tensorflow/tfjs";
-import { attentiveList } from "./methods/attentive_list";
-import { nonAttentiveList } from "./methods/non_attentive_list";
-import { initPoints } from "./methods/init_points";
-import { UseUpdateTimeUseEffect } from "./hooks/update_timer";
-import { UsepreEngine } from "./hooks/pre_engine";
+import { attentiveList } from "./pages/methods/attentive_list";
+import { nonAttentiveList } from "./pages/methods/non_attentive_list";
+import { initPoints } from "./pages/methods/init_points";
+import { UseUpdateTimeUseEffect } from "./pages/hooks/update_timer";
+import { UsepreEngine } from "./pages/hooks/pre_engine";
 import nightSkyVidBg from "../assets/night_sky_bg.mp4";
 
 function Pose() {

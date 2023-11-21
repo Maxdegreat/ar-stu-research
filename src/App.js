@@ -8,16 +8,22 @@
 // draw functions
 
 
-import Container from "./components/Container";
-import Navbar from "./components/Navbar";
+
 import AttentionOutputs from "./components/AttentionOutputs";
+import Attention from "./pagesNew/Attention";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import FindFaces from "./pagesNew/FindFaces";
 
 function App() {
   return (
-    <div>
-      <Navbar/>
-      <Container/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Attention />}> </Route>
+        <Route path="/home" element={<Attention />}> </Route>
+
+        <Route path="/findface" element={<FindFaces />}> </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

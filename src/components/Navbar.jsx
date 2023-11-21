@@ -3,7 +3,8 @@ import React from 'react';
 const Navbar = () => {
   return (
     <nav style={styles.nav}>
-      <a style={styles.navText} href="/">Study Zone</a>
+      <a style={styles.navText} href="/home">Study Zone</a>
+      <a style={styles.navText} href="/findface">Find Faces</a>
     </nav>
   );
 };
