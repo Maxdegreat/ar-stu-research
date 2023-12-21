@@ -22,45 +22,37 @@ export default function FindFaces() {
 
   const imageSrc = webcamRef.current.getScreenshot();
 
-  // Remove the data URL prefix
-  const base64String = imageSrc.split(',')[1];
-  // Decode the base64 string
-  const binaryString = window.atob(base64String);
-  // Convert the binary string to a byte array
-  const len = binaryString.length;
-  var imageBytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
-      imageBytes[i] = binaryString.charCodeAt(i);
-  }
-  console.log(imageBytes);
 
+  // Encode the PNG image to base64
+  const base64Image = imageSrc.replace('data:image/png;base64,', '');
+  // console.log("LOG OF BASE64 ENCODED IMAGE:", base64Image);
+
+  // Call API and get request back
   try {
+    // Call the findFaces Flask API with a POST request
     const response = await axios.post('http://127.0.0.1:5000/find_faces', {
-        image_bytes: imageBytes,
-      });
-      var res = await response.data;
-      console.log("response: " + JSON.stringify(res));
+      image_encoded_into_base64: base64Image
+    });
+
+
+    // TODO: should pass back another base64 image where the decoded response image is a cropping of the original image 
+
+    console.log("The response data: ", response.data);
+    var croppedFace = response.data.cropped_faces;
+    if (croppedFace === undefined || croppedFace === null) {
+      console.log("The response data for key cropped_faces is None or Undefined");
+    } else {
+      setImgSrc(croppedFace);
+      // // Decode the response
+      // const decodedResponse = atob(await response.data);
+      // // Set the response
+      // setImgSrc(decodedResponse);
+    }
   } catch (error) {
     console.error('Error calling the findFaces API:', error);
   }
 
-          
 
-// Encode the PNG image to base64
-//   const base64Image = imageSrc.replace('data:image/png;base64,', '');
-//   console.log(base64Image);
-//   try {
-//     // Call the findFaces Flask API with a POST request
-//     const response = await axios.post('http://localhost:5000/findFaces', {
-//       image: imageBytes
-//     });
-//     // Decode the response
-//     const decodedResponse = atob(await response.data);
-//     // Set the response
-//     setImgSrc(decodedResponse);
-//   } catch (error) {
-//     console.error('Error calling the findFaces API:', error);
-//   }
 }, [webcamRef, setImgSrc]);
 
   const mainDivStyle = {
@@ -73,6 +65,15 @@ export default function FindFaces() {
     justifyContent: 'spaceAround',
     alignItems: 'center'
   }
+
+  const linkToCoLab = {
+    color: 'blue',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+  }
+
+  // Construct the data URL without specifying the image format
+  const dataUrl = `data:image;base64,${imgSrc}`;
 
   return (
     <div>
@@ -88,6 +89,11 @@ export default function FindFaces() {
         </p>
 
 
+        <div className="linkToCoLab">
+          <a style={linkToCoLab} href="https://colab.research.google.com/drive/1Hvw7Xsek7w1vU53gXZpqBy6vS6MK98Rj?usp=sharing"> Check Out The Google CoLab</a>
+        </div>
+
+
           <Webcam
             audio={false}
             ref={webcamRef}
@@ -97,6 +103,8 @@ export default function FindFaces() {
               height: "200px",
             }}
           />
+
+
           
 
           <button
@@ -117,6 +125,12 @@ export default function FindFaces() {
 
       </>
       </div>
+
+      <div>
+      <h1>Your React Component</h1>
+      {/* Display the image using the img element */}
+      <img src={dataUrl} alt="Your Image" />
+    </div>
 
       <h1> Below are links to articles explaining discoveries on deep fake detection</h1>
 

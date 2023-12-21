@@ -1,5 +1,4 @@
 {
-  "homepage": "https://Maxdegreat.github.io/ar-stu-research/",
   "proxy": "http://localhost:5000",
   "name": "pose-photo-shoot",
   "version": "0.1.0",
@@ -18,7 +17,7 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.0",
     "react-webcam": "^7.0.0",
     "styled-components": "^5.3.5",
